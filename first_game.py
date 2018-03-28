@@ -13,6 +13,9 @@ DEPTH = 32
 FLAGS = 0
 CAMERA_SLACK = 30
 
+background_x = 0
+background_y = 0
+
 def main():
     global cameraX, cameraY
     pygame.init()
@@ -83,10 +86,10 @@ def main():
     total_level_height = len(level)*32
     camera = Camera(complex_camera, total_level_width, total_level_height)
     entities.add(player)
-
+    global background_x, background_y
+    BackGround = Background('kitchen_background.jpg', [background_x, background_y])
     while 1:
         timer.tick(60)
-
         for e in pygame.event.get():
             if e.type == QUIT: raise SystemExit("QUIT")
             if e.type == KEYDOWN and e.key == K_ESCAPE:
@@ -97,7 +100,7 @@ def main():
                 down = True
             if e.type == KEYDOWN and (e.key == K_LEFT or e.key == K_a):
                 left = True
-            if e.type == KEYDOWN and (e.key == K_RIGHT or e.key == K_d):
+            if (e.type == KEYDOWN) and (e.key == K_RIGHT or e.key == K_d):
                 right = True
             if e.type == KEYDOWN and e.key == K_SPACE:
                 running = True
@@ -119,11 +122,24 @@ def main():
         camera.update(player)
 
         # update player, draw everything else
+        screen.blit(BackGround.image, BackGround.rect)
         player.update(up, down, left, right, running, platforms)
         for e in entities:
             screen.blit(e.image, camera.apply(e))
+        if right:
+            background_x = background_x - 1
+        if left:
+            background_x = background_x + 1
 
+        BackGround = Background('kitchen_background.jpg', [background_x, background_y])
         pygame.display.update()
+
+class Background(pygame.sprite.Sprite):
+    def __init__(self, image_file, location):
+        pygame.sprite.Sprite.__init__(self)  #call Sprite initializer
+        self.image = pygame.image.load(image_file)
+        self.rect = self.image.get_rect()
+        self.rect.left, self.rect.top = location
 
 class Camera(object):
     def __init__(self, camera_func, width, height):
