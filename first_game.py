@@ -17,6 +17,11 @@ def main():
     global cameraX, cameraY
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, FLAGS, DEPTH)
+
+    # background = pygame.Surface(screen.get_size())
+    # background.fill((255, 0, 255))
+    # screen.blit(background, (0, 0))
+
     pygame.display.set_caption("Use arrows to move!")
     timer = pygame.time.Clock()
 
@@ -30,31 +35,31 @@ def main():
 
     x = y = 0
     level = [
-        "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
-        "P                                          P",
-        "P                                          P",
-        "P                                          P",
-        "P                    PPPPPPPPPPP           P",
-        "P                                          P",
-        "P                                          P",
-        "P                                          P",
-        "P    PPPPPPPP                              P",
-        "P                                          P",
-        "P                          PPPPPPP         P",
-        "P                 PPPPPP                   P",
-        "P                                          P",
-        "P         PPPPPPP                          P",
-        "P                                          P",
-        "P                     PPPPPP               P",
-        "P                                          P",
-        "P   PPPPPPPPPPP                            P",
-        "P                                          P",
-        "P                 PPPPPPPPPPP              P",
-        "P                                          P",
-        "P                                          P",
-        "P                                          P",
-        "P                                          P",
-        "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",]
+        "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",
+        "P                                                                                                                                                                                                                                                                                                                                                                                                                                                      P",
+        "P                                                                                                                                                                                                                                                                                                                                                                                                                                                      P",
+        "P                                                                                                                                                                                                                                                                                                                                                                                                                                                      P",
+        "P                    WWWWWWWWWWW                                                                                                                                                                                                                                                                                                                                                                                                                       P",
+        "P                                                                                                                                                                                                                                                                                                                                                                                                                                                      P",
+        "P                                                                                                                                                                                                                                                                                                                                                                                                                                                      P",
+        "P                                                                                                                                   WWWWWWW                                                                                                                                                                                                                                                                                                            P",
+        "P    WWWWWWWW                                                                                                                                                                                                                                                                                                                                                                                                                                          P",
+        "P                                                                                                                                                                                                                                                                                                                                                                                                                                                      P",
+        "P                          WWWWWWWWW                                                                                                                                                                                                                                                                                                                                                                                                                   P",
+        "P                                                 WWWWWWWWWW                                                                                                                                                                                                                                                                                                                                                                                           P",
+        "P                                                                                                               WWWWWWWWWWW                                                                                                                                                                                                                                                                                                                            P",
+        "P         WWWWWWW                                                                                                                                                                                                                                                                                                                                                                                                                                      P",
+        "P                                                                                                                                                                                                                                                                                                                                                                                                                                                      P",
+        "P                     WWWWWWWWW                                                                                                                            WWW                                                                                                                                                                                                                                                                                         P",
+        "P                                                                                          WWWWWWWWWWWWWW                                                                                                                                                                                                                                                                                                                                              P",
+        "P   WWWWWWWWWWW                                                                                                                                                                                                                                                                                                                                                                                                                                        P",
+        "P                                                                               PPP                                                                                                                                                                                                                                                                                                                                                                    P",
+        "P                 WWWWWWWWWWWWWW                                                 P                                                                                                                                                                                                                                                                                                                                                                     P",
+        "P                                                                                P                                                                                                                                                                                                                                                                                                                                                                     P",
+        "P                                                                                P                                                                                                                                                                                                                                                                                                                                                                     P",
+        "P                                                                      P         P        P                                                                                                                                                                                                                                                                                                                                                            P",
+        "P                                                                      P         P        P                                                                                                                                                                                                                                                                                                                                                            P",
+        "PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP",]
     # build the level
     for row in level:
         for col in row:
@@ -62,6 +67,10 @@ def main():
                 p = Platform(x, y)
                 platforms.append(p)
                 entities.add(p)
+            if col == "W":
+                w = Platform(x, y)
+                platforms.append(w)
+                entities.add(w)
             if col == "E":
                 e = ExitBlock(x, y)
                 platforms.append(e)
@@ -82,24 +91,24 @@ def main():
             if e.type == QUIT: raise SystemExit("QUIT")
             if e.type == KEYDOWN and e.key == K_ESCAPE:
                 raise SystemExit("ESCAPE")
-            if e.type == KEYDOWN and e.key == K_UP:
+            if e.type == KEYDOWN and (e.key == K_UP or e.key == K_w):
                 up = True
-            if e.type == KEYDOWN and e.key == K_DOWN:
+            if e.type == KEYDOWN and (e.key == K_DOWN or e.key == K_s):
                 down = True
-            if e.type == KEYDOWN and e.key == K_LEFT:
+            if e.type == KEYDOWN and (e.key == K_LEFT or e.key == K_a):
                 left = True
-            if e.type == KEYDOWN and e.key == K_RIGHT:
+            if e.type == KEYDOWN and (e.key == K_RIGHT or e.key == K_d):
                 right = True
             if e.type == KEYDOWN and e.key == K_SPACE:
                 running = True
 
-            if e.type == KEYUP and e.key == K_UP:
+            if e.type == KEYUP and (e.key == K_UP or e.key == K_w):
                 up = False
-            if e.type == KEYUP and e.key == K_DOWN:
+            if e.type == KEYUP and (e.key == K_DOWN or e.key == K_s):
                 down = False
-            if e.type == KEYUP and e.key == K_RIGHT:
+            if e.type == KEYUP and (e.key == K_RIGHT or e.key == K_d):
                 right = False
-            if e.type == KEYUP and e.key == K_LEFT:
+            if e.type == KEYUP and (e.key == K_LEFT or e.key == K_a):
                 left = False
 
         # draw background
@@ -215,6 +224,7 @@ class Platform(Entity):
         self.image.convert()
         self.image.fill(Color("#DDDDDD"))
         self.rect = Rect(x, y, 32, 32)
+        # self.image.blit()
 
     def update(self):
         pass
