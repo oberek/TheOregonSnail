@@ -2,9 +2,10 @@
 
 import pygame
 from pygame import *
+from pygame_functions import *
 
-WIN_WIDTH = 800
-WIN_HEIGHT = 640
+WIN_WIDTH = 1000
+WIN_HEIGHT = 750
 HALF_WIDTH = int(WIN_WIDTH / 2)
 HALF_HEIGHT = int(WIN_HEIGHT / 2)
 
@@ -16,11 +17,12 @@ CAMERA_SLACK = 30
 background_x = 0
 background_y = 0
 
+
 def main():
     global cameraX, cameraY
     pygame.init()
     screen = pygame.display.set_mode(DISPLAY, FLAGS, DEPTH)
-
+    setBackgroundImage("kitchen_background.jpg")
     # background = pygame.Surface(screen.get_size())
     # background.fill((255, 0, 255))
     # screen.blit(background, (0, 0))
@@ -34,6 +36,7 @@ def main():
     bg.fill(Color("#000000"))
     entities = pygame.sprite.Group()
     player = Player(32, 32)
+    player.animate(Surface((32,32)).blit("snail.gif"))
     platforms = []
 
     x = y = 0
@@ -86,8 +89,8 @@ def main():
     total_level_height = len(level)*32
     camera = Camera(complex_camera, total_level_width, total_level_height)
     entities.add(player)
-    global background_x, background_y
-    BackGround = Background('kitchen_background.jpg', [background_x, background_y])
+    # global background_x, background_y
+    # BackGround = Background('kitchen_background.jpg', [background_x, background_y])
     while 1:
         timer.tick(60)
         for e in pygame.event.get():
@@ -122,24 +125,24 @@ def main():
         camera.update(player)
 
         # update player, draw everything else
-        screen.blit(BackGround.image, BackGround.rect)
+        # screen.blit(BackGround.image, BackGround.rect)
         player.update(up, down, left, right, running, platforms)
         for e in entities:
             screen.blit(e.image, camera.apply(e))
-        if right:
-            background_x = background_x - 1
-        if left:
-            background_x = background_x + 1
+        # if right:
+        #     background_x = background_x - 1
+        # if left:
+        #     background_x = background_x + 1
 
-        BackGround = Background('kitchen_background.jpg', [background_x, background_y])
+        # BackGround = Background('kitchen_background.jpg', [background_x, background_y])
         pygame.display.update()
 
-class Background(pygame.sprite.Sprite):
-    def __init__(self, image_file, location):
-        pygame.sprite.Sprite.__init__(self)  #call Sprite initializer
-        self.image = pygame.image.load(image_file)
-        self.rect = self.image.get_rect()
-        self.rect.left, self.rect.top = location
+# class Background(pygame.sprite.Sprite):
+#     def __init__(self, image_file, location):
+#         pygame.sprite.Sprite.__init__(self)  #call Sprite initializer
+#         self.image = pygame.image.load(image_file)
+#         self.rect = self.image.get_rect()
+#         self.rect.left, self.rect.top = location
 
 class Camera(object):
     def __init__(self, camera_func, width, height):
@@ -183,6 +186,10 @@ class Player(Entity):
         self.image.convert()
         self.rect = Rect(x, y, 32, 32)
 
+    def animate(self, frame):
+        self.image = Surface((300, 150), pygame.SRCALPHA)
+        self.image.blit(frame, (0, 0))
+
     def update(self, up, down, left, right, running, platforms):
         if up:
             # only jump if on the ground
@@ -212,6 +219,7 @@ class Player(Entity):
         self.onGround = False;
         # do y-axis collisions
         self.collide(0, self.yvel, platforms)
+
 
     def collide(self, xvel, yvel, platforms):
         for p in platforms:
